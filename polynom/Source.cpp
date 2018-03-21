@@ -1,17 +1,16 @@
 /*
-**На вход командной строки даются коэффициенты многолченов a и b
+**ГЌГ  ГўГµГ®Г¤ ГЄГ®Г¬Г Г­Г¤Г­Г®Г© Г±ГІГ°Г®ГЄГЁ Г¤Г ГѕГІГ±Гї ГЄГ®ГЅГґГґГЁГ¶ГЁГҐГ­ГІГ» Г¬Г­Г®ГЈГ®Г«Г·ГҐГ­Г®Гў a ГЁ b
 ** "a(n-1) a(n-2) ... a(1)" "b(n-1) b(n-2) ... b(1)"
-** Вывести коэффициенты 
+** Г‚Г»ГўГҐГ±ГІГЁ ГЄГ®ГЅГґГґГЁГ¶ГЁГҐГ­ГІГ» 
 */
-/* http://cppstudio.com/post/812/ */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 struct polynomial {
-	double coef[128];/* Коэффициенты многочлена */
-	int deg;/* Степень многочлена */
+	double coef[128];/* ГЉГ®ГЅГґГґГЁГ¶ГЁГҐГ­ГІГ» Г¬Г­Г®ГЈГ®Г·Г«ГҐГ­Г  */
+	int deg;/* Г‘ГІГҐГЇГҐГ­Гј Г¬Г­Г®ГЈГ®Г·Г«ГҐГ­Г  */
 };
 
 int multPoly(struct polynomial *result, struct polynomial *pola, struct polynomial *polb) {
@@ -24,7 +23,7 @@ int multPoly(struct polynomial *result, struct polynomial *pola, struct polynomi
 }
 
 int makePoly(struct polynomial *pol, char* string) {
-	/* Инициализация многочлена */
+	/* Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Г¬Г­Г®ГЈГ®Г·Г«ГҐГ­Г  */
 	pol->deg = 0;
 	int i;
 	for (i = 0; i < 128; i++) {
@@ -32,7 +31,7 @@ int makePoly(struct polynomial *pol, char* string) {
 	}
 	if (string) {
 
-		/* Заполнение многолчена коэффициентами */
+		/* Г‡Г ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г¬Г­Г®ГЈГ®Г«Г·ГҐГ­Г  ГЄГ®ГЅГґГґГЁГ¶ГЁГҐГ­ГІГ Г¬ГЁ */
 		char* endptr = string;
 		i = -1;
 		int len = strlen(string);
@@ -41,7 +40,7 @@ int makePoly(struct polynomial *pol, char* string) {
 			pol->coef[i] = strtod(endptr, &endptr);
 		} while ((endptr - string) != len);
 		pol->coef[++i] = strtod(endptr, &endptr);
-		/* Конец заполнения */
+		/* ГЉГ®Г­ГҐГ¶ Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї */
 
 		pol->deg = i-1;
 		double temp;
@@ -64,7 +63,7 @@ int main(int argc, char *argv[]) {
 	makePoly(&InputPolyB, InputStringB);
 	makePoly(&OutputPolyC, NULL);
 	multPoly(&OutputPolyC, &InputPolyA, &InputPolyB);
-	/* Вывод на экран многочленов */
+	/* Г‚Г»ГўГ®Г¤ Г­Г  ГЅГЄГ°Г Г­ Г¬Г­Г®ГЈГ®Г·Г«ГҐГ­Г®Гў */
 	for (int i = OutputPolyC.deg; i >= 0; i--) {
 		printf("%f ", OutputPolyC.coef[i]);
 
