@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 struct polynomial {
 	double coef[128];/* Коэффициенты многочлена */
@@ -18,7 +19,7 @@ int multPoly(struct polynomial *result, struct polynomial *pola, struct polynomi
 	int i,j;
 	for (i = 0; i <= pola->deg; i++)
 	for (j = 0; j <= polb->deg; j++)
-		result->coef[i + j] = pola->coef[i] * polb->coef[j];
+		result->coef[i + j] += pola->coef[i] * polb->coef[j];
 	return 0;
 }
 
@@ -30,13 +31,18 @@ int makePoly(struct polynomial *pol, char* string) {
 		pol->coef[i] = 0;
 	}
 	if (string) {
-		/* Заполнение многолчена коффициентами */
+
+		/* Заполнение многолчена коэффициентами */
 		char* endptr = string;
 		i = -1;
+		int len = strlen(string);
 		do {
 			i++;
 			pol->coef[i] = strtod(endptr, &endptr);
-		} while (pol->coef[i]);
+		} while ((endptr - string) != len);
+		pol->coef[++i] = strtod(endptr, &endptr);
+		/* Конец заполнения */
+
 		pol->deg = i-1;
 		double temp;
 		for (i = 0; i <= pol->deg / 2; i++) {
@@ -59,27 +65,10 @@ int main(int argc, char *argv[]) {
 	makePoly(&OutputPolyC, NULL);
 	multPoly(&OutputPolyC, &InputPolyA, &InputPolyB);
 	/* Вывод на экран многочленов */
-	printf("\n");
-
-	for (int i = 0; i <= InputPolyA.deg; i++) {
-		printf("(%f)*x^%d ", InputPolyA.coef[i], i);
+	for (int i = OutputPolyC.deg; i >= 0; i--) {
+		printf("%f ", OutputPolyC.coef[i]);
 
 	}
-	printf("\ndeg P1(x)=%d\n", InputPolyA.deg);
 	printf("\n");
-
-	for (int i = 0; i <= InputPolyB.deg; i++) {
-		printf("(%f)*x^%d ", InputPolyB.coef[i], i);
-	}
-	printf("\ndeg P2(x)=%d\n", InputPolyB.deg);
-	printf("\n");
-
-	for (int i = 0; i <= OutputPolyC.deg; i++) {
-		printf("(%f)*x^%d ", OutputPolyC.coef[i], i);
-
-	}
-	printf("\ndeg P3(x)=%d\n", OutputPolyC.deg);
-	printf("\n");
-
 	return 0;
 }
