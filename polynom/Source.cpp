@@ -9,17 +9,22 @@
 #include <stdio.h>
 
 struct polynomial {
-	double coef[128];
-	int degree;
+	double coef[128];/* Коэффициенты многочлена */
+	int deg;/* Степень многочлена */
 };
 
-void swap(double polynomial:: *a, double polynomial:: *b) {
-
+int multPoly(struct polynomial *result, struct polynomial *pola, struct polynomial *polb) {
+	result->deg = pola->deg + polb->deg;
+	int i,j;
+	for (i = 0; i <= pola->deg; i++)
+	for (j = 0; j <= polb->deg; j++)
+		result->coef[i + j] = pola->coef[i] * polb->coef[j];
+	return 0;
 }
 
 int makePoly(struct polynomial *pol, char* string) {
 	/* Инициализация многочлена */
-	pol->degree = 0;
+	pol->deg = 0;
 	int i;
 	for (i = 0; i < 128; i++) {
 		pol->coef[i] = 0;
@@ -32,12 +37,12 @@ int makePoly(struct polynomial *pol, char* string) {
 			i++;
 			pol->coef[i] = strtod(endptr, &endptr);
 		} while (pol->coef[i]);
-		pol->degree = i-1;
+		pol->deg = i-1;
 		double temp;
-		for (i = 0; i <= pol->degree / 2; i++) {
+		for (i = 0; i <= pol->deg / 2; i++) {
 			temp = pol->coef[i];
-			pol->coef[i] = pol->coef[pol->degree - i];
-			pol->coef[pol->degree - i] = temp;
+			pol->coef[i] = pol->coef[pol->deg - i];
+			pol->coef[pol->deg - i] = temp;
 		}
 	}
 	return 0;
@@ -52,21 +57,29 @@ int main(int argc, char *argv[]) {
 	makePoly(&InputPolyA, InputStringA);
 	makePoly(&InputPolyB, InputStringB);
 	makePoly(&OutputPolyC, NULL);
-
+	multPoly(&OutputPolyC, &InputPolyA, &InputPolyB);
 	/* Вывод на экран многочленов */
 	printf("\n");
-	for (int i = 0; i <= InputPolyA.degree; i++) {
+
+	for (int i = 0; i <= InputPolyA.deg; i++) {
 		printf("(%f)*x^%d ", InputPolyA.coef[i], i);
 
 	}
-	printf("\ndeg P1(x)=%d\n", InputPolyA.degree);
-	printf("\n");
-	for (int i = 0; i <= InputPolyB.degree; i++) {
-		printf("(%f)*x^%d ", InputPolyB.coef[i], i);
-	}
-	printf("\ndeg P2(x)=%d\n", InputPolyB.degree);
+	printf("\ndeg P1(x)=%d\n", InputPolyA.deg);
 	printf("\n");
 
-	/*OutputPolyC = multPoly(PolyA, PolyB);*/
+	for (int i = 0; i <= InputPolyB.deg; i++) {
+		printf("(%f)*x^%d ", InputPolyB.coef[i], i);
+	}
+	printf("\ndeg P2(x)=%d\n", InputPolyB.deg);
+	printf("\n");
+
+	for (int i = 0; i <= OutputPolyC.deg; i++) {
+		printf("(%f)*x^%d ", OutputPolyC.coef[i], i);
+
+	}
+	printf("\ndeg P3(x)=%d\n", OutputPolyC.deg);
+	printf("\n");
+
 	return 0;
 }
